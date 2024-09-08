@@ -48,6 +48,7 @@ def run_game():
     print("Estado inicial del rompecabezas:", puzzle.state)  # Depuración
 
     solution_steps = []  # Pasos de la solución
+    moves = []  # Movimientos realizados
 
     while running:
         for event in pygame.event.get():
@@ -66,10 +67,20 @@ def run_game():
                 
                 # Resolver automáticamente usando A* con la heurística de Manhattan
                 elif event.key == pygame.K_SPACE:
-                    solution = a_star_search(puzzle, heuristic_manhattan)
-                    if solution:
+                    result = a_star_search(puzzle, heuristic_manhattan)
+                    
+                    if result['found_solution']:
                         print("Solución encontrada")
-                        solution_steps = solution
+                        print(f"Tiempo de resolución: {result['time']:.4f} segundos")
+                        print(f"Tamaño máximo de la frontera: {result['max_frontier_size']}")
+                        solution_steps = result['solution']
+                        moves = result['moves']  # Obtener los movimientos
+                        print("Movimientos realizados:", moves)  # Imprimir los movimientos
+                    else:
+                        print("No se encontró solución")
+                        print(f"Tiempo de ejecución: {result['time']:.4f} segundos")
+                        print(f"Tamaño máximo de la frontera: {result['max_frontier_size']}")
+                            
 
         # Dibujar el tablero
         draw_puzzle(puzzle)
@@ -80,5 +91,7 @@ def run_game():
                 draw_puzzle(step)   # Dibujar el estado actual del rompecabezas
                 pygame.display.flip()  # Actualizar la pantalla
                 pygame.time.delay(500)  # Pausa para ver la transición entre pasos
+                puzzle = step  # Actualizar el estado del rompecabezas
 
     pygame.quit()
+
