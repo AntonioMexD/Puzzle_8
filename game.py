@@ -2,6 +2,7 @@ import pygame
 from puzzle import Puzzle
 from search import a_star_search
 from heuristics import heuristic_manhattan
+from utils import generate_random_puzzle, is_solvable
 
 # Inicializar Pygame
 pygame.init()
@@ -34,9 +35,19 @@ def draw_puzzle(puzzle):
                 screen.blit(text, (j * TILE_SIZE + 30, i * TILE_SIZE + 20))
     pygame.display.flip()
 
-def main():
+def run_game():
     running = True
-    puzzle = Puzzle([[1, 2, 3], [4, 5, 6], [7, 8, 0]])  # Estado inicial resuelto
+    puzzle = None
+
+    # Generar un rompecabezas válido
+    while puzzle is None:
+        initial_state = generate_random_puzzle()
+        if is_solvable(initial_state):
+            puzzle = Puzzle(initial_state)
+    
+    print("Estado inicial del rompecabezas:", puzzle.state)  # Depuración
+
+    solution_steps = []  # Pasos de la solución
 
     while running:
         for event in pygame.event.get():
@@ -58,13 +69,16 @@ def main():
                     solution = a_star_search(puzzle, heuristic_manhattan)
                     if solution:
                         print("Solución encontrada")
-                        for step in solution:
-                            step.display()
-        
+                        solution_steps = solution
+
         # Dibujar el tablero
         draw_puzzle(puzzle)
+                
+        if solution_steps:
+            for step in solution_steps:
+                screen.fill(WHITE)  # Limpiar la pantalla
+                draw_puzzle(step)   # Dibujar el estado actual del rompecabezas
+                pygame.display.flip()  # Actualizar la pantalla
+                pygame.time.delay(500)  # Pausa para ver la transición entre pasos
 
     pygame.quit()
-
-if __name__ == "__main__":
-    main()

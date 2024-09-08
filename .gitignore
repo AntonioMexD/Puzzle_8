@@ -1,0 +1,27 @@
+# Bytecode de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos de entornos virtuales
+venv/
+.env/
+
+# Archivos generados por el editor
+.idea/
+.vscode/
+
+# Archivos generados por Pygame
+*.swp
+*.swo
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Archivos de caché
+.cache/
