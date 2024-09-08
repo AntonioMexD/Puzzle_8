@@ -3,7 +3,8 @@ import random
 def generate_random_puzzle():
     puzzle = list(range(9))
     random.shuffle(puzzle)
-    return [puzzle[:3], puzzle[3:6], puzzle[6:]]
+    return [puzzle[i:i+3] for i in range(0, 9, 3)]  # Garantiza una estructura de 3x3
+
 
 def is_solvable(puzzle):
     # Verifica si el estado es resoluble usando el número de inversiones
