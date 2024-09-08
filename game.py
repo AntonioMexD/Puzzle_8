@@ -35,7 +35,7 @@ def draw_puzzle(puzzle):
                 screen.blit(text, (j * TILE_SIZE + 30, i * TILE_SIZE + 20))
     pygame.display.flip()
 
-def main():
+def run_game():
     running = True
     puzzle = None
 
@@ -82,6 +82,3 @@ def main():
                 pygame.time.delay(500)  # Pausa para ver la transición entre pasos
 
     pygame.quit()
-
-if __name__ == "__main__":
-    main()
