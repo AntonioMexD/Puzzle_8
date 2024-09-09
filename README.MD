@@ -58,9 +58,9 @@ El archivo experiments_results.csv contiene los resultados de 1000 experimentos,
 
 Colaboradores
 
-[Antonio Medina]
-[Ricardo Pelaez]
-[Jhoselin Quiroga]
+Antonio Medina
+Ricardo Pelaez
+Jhoselin Quiroga
 
 
 Contribuciones
