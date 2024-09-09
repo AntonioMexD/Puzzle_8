@@ -56,6 +56,13 @@ Resultados Experimentales
 
 El archivo experiments_results.csv contiene los resultados de 1000 experimentos, incluyendo el estado inicial, el algoritmo de búsqueda utilizado, la heurística, si se encontró una solución, el tiempo de ejecución y el tamaño máximo de la frontera.
 
+Colaboradores
+
+[Antonio Medina]
+[Ricardo Pelaez]
+[Jhoselin Quiroga]
+
+
 Contribuciones
 
 Si deseas contribuir al proyecto, por favor haz un fork del repositorio y envía tus pull requests. Asegúrate de que tu código pase todas las pruebas y esté bien documentado.
