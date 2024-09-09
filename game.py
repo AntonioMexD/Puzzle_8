@@ -1,6 +1,6 @@
 import pygame
 from puzzle import Puzzle
-from search import a_star_search
+from search import a_star_search, greedy_search
 from heuristics import heuristic_manhattan
 from utils import generate_random_puzzle, is_solvable
 
@@ -24,15 +24,28 @@ pygame.display.set_caption('8-Puzzle')
 # Fuente para el texto
 font = pygame.font.Font(None, 74)
 
+def display_victory_message(screen):
+    font = pygame.font.SysFont(None, 55)
+    message = "¡Victoria! ¡Has resuelto el rompecabezas!"
+    text = font.render(message, True, (0, 255, 0))  # Verde
+    screen.fill((0, 0, 0))  # Fondo negro
+    screen.blit(text, (100, 250))  # Posicionar el texto en el centro
+    pygame.display.flip()  # Actualizar la pantalla
+    pygame.time.wait(2000)  # Esperar 2 segundos para mostrar el mensaje
+
 def draw_puzzle(puzzle):
     screen.fill(WHITE)
-    for i in range(puzzle.size):
-        for j in range(puzzle.size):
-            tile = puzzle.state[i][j]
-            if tile != 0:  # No dibujar el espacio vacío
-                pygame.draw.rect(screen, BLUE, (j * TILE_SIZE, i * TILE_SIZE, TILE_SIZE, TILE_SIZE))
-                text = font.render(str(tile), True, WHITE)
-                screen.blit(text, (j * TILE_SIZE + 30, i * TILE_SIZE + 20))
+    if isinstance(puzzle, Puzzle):
+        size = puzzle.size  # Obtener el tamaño del rompecabezas desde la instancia
+        for i in range(size):
+            for j in range(size):
+                tile = puzzle.state[i][j]  # Acceder a los elementos de la lista directamente
+                if tile != 0:  # No dibujar el espacio vacío
+                    pygame.draw.rect(screen, BLUE, (j * TILE_SIZE, i * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+                    text = font.render(str(tile), True, WHITE)
+                    screen.blit(text, (j * TILE_SIZE + 30, i * TILE_SIZE + 20))
+    else:
+        print("Error: Expected an instance of Puzzle but got", type(puzzle))
     pygame.display.flip()
 
 def run_game():
@@ -68,6 +81,7 @@ def run_game():
                 # Resolver automáticamente usando A* con la heurística de Manhattan
                 elif event.key == pygame.K_SPACE:
                     result = a_star_search(puzzle, heuristic_manhattan)
+                    #result = greedy_search(puzzle, heuristic_manhattan)
                     
                     if result['found_solution']:
                         print("Solución encontrada")
@@ -76,22 +90,28 @@ def run_game():
                         solution_steps = result['solution']
                         moves = result['moves']  # Obtener los movimientos
                         print("Movimientos realizados:", moves)  # Imprimir los movimientos
+                        
+                        # Mostrar mensaje de victoria
+                        display_victory_message(pygame.display.get_surface())
+                        
+                        # Detener el juego
+                        running = False
                     else:
                         print("No se encontró solución")
                         print(f"Tiempo de ejecución: {result['time']:.4f} segundos")
                         print(f"Tamaño máximo de la frontera: {result['max_frontier_size']}")
-                            
 
         # Dibujar el tablero
-        draw_puzzle(puzzle)
+        if isinstance(puzzle, Puzzle):  # Verificar que `puzzle` es una instancia de `Puzzle`
+            draw_puzzle(puzzle)
                 
         if solution_steps:
             for step in solution_steps:
-                screen.fill(WHITE)  # Limpiar la pantalla
-                draw_puzzle(step)   # Dibujar el estado actual del rompecabezas
-                pygame.display.flip()  # Actualizar la pantalla
-                pygame.time.delay(500)  # Pausa para ver la transición entre pasos
-                puzzle = step  # Actualizar el estado del rompecabezas
+                if isinstance(step, Puzzle):  # Verificar que `step` es una instancia de `Puzzle`
+                    screen.fill(WHITE)  # Limpiar la pantalla
+                    draw_puzzle(step)   # Dibujar el estado actual del rompecabezas
+                    pygame.display.flip()  # Actualizar la pantalla
+                    pygame.time.delay(500)  # Pausa para ver la transición entre pasos
+                    puzzle = step  # Actualizar el estado del rompecabezas
 
     pygame.quit()
-
